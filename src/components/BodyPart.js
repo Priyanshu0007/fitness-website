@@ -1,13 +1,18 @@
 import { Stack, Typography } from '@mui/material'
 import React from 'react'
 import Icon from '../assets/icons/gym.png'
+import { addBodyPart } from '../store/bodyPartSlice'
+import { useDispatch, useSelector } from 'react-redux'
 
-const BodyPart = ({item,setBodyPart,bodyPart}) => {
+const BodyPart = ({item}) => {
+  const dispatch=useDispatch();
+  const bodyPart=useSelector(state=>state.bodyPart.bodyPart);
   return (
     <Stack type='button' alignItems='center' justifyContent='center' className='bodyPart-card' 
     sx={bodyPart === item ? { borderTop: '4px solid #FF2625', background: '#fff', borderBottomLeftRadius: '20px', width: '270px', height: '282px', cursor: 'pointer', gap: '47px' } : { background: '#fff', borderBottomLeftRadius: '20px', width: '270px', height: '282px', cursor: 'pointer', gap: '47px' 
     }}
-    onClick={()=>{setBodyPart(item); 
+    onClick={()=>{
+      dispatch(addBodyPart(item));
       window.scrollTo({top:1800,left:100,behavior:'smooth'})
     }}
     >        

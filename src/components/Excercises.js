@@ -2,8 +2,13 @@ import { Box, Pagination, Stack, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import ExerciseCard from './ExerciseCard'
 import { exerciseOptions, fetchData } from '../utils/fetchData';
+import { addExercises } from '../store/exercisesSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
-const Excercises = ({exercises,setExercises,bodyPart}) => {
+const Excercises = () => {
+    const exercises=useSelector(state=>state.exercises.exercises);
+    const bodyPart=useSelector(state=>state.bodyPart.bodyPart);
+    const dispatch=useDispatch();
     const [currentPage,setCurrentPage]=useState(1);
     const exercisesPerPage=12;
     const indexOfLastExercise=currentPage*exercisesPerPage;
@@ -18,7 +23,8 @@ const Excercises = ({exercises,setExercises,bodyPart}) => {
             let exercisesData=[];
             if(bodyPart==='all'){exercisesData=await fetchData('https://exercisedb.p.rapidapi.com/exercises',exerciseOptions);}
             else{exercisesData=await fetchData(`https://exercisedb.p.rapidapi.com/exercises/bodyPart/${bodyPart}`,exerciseOptions);}
-            setExercises(exercisesData);
+            dispatch(addExercises(exercisesData));
+            setCurrentPage(1);
         }
         fetchExercisesData();
     },[bodyPart])

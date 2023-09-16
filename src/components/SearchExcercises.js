@@ -2,8 +2,10 @@ import { Box, Button, Stack, TextField, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { exerciseOptions, fetchData } from '../utils/fetchData';
 import HorizontalsScrollBar from './HorizontalsScrollBar';
-
-const SearchExcercises = ({setExercises,bodyPart,setBodyPart}) => {
+import { useDispatch } from 'react-redux';
+import {addExercises} from '../store/exercisesSlice'
+const SearchExcercises = () => {
+    const dispatch=useDispatch();
     const [search,setSearch]=useState('');
     const [bodyParts,setBodyParts]=useState([]);
     useEffect(()=>{
@@ -25,9 +27,8 @@ const SearchExcercises = ({setExercises,bodyPart,setBodyPart}) => {
             );
       
             window.scrollTo({ top: 1800, left: 100, behavior: 'smooth' });
-                
             setSearch('');
-            setExercises(searchedExercises);
+            dispatch(addExercises(searchedExercises));
           }
         };
   return (
@@ -40,7 +41,7 @@ const SearchExcercises = ({setExercises,bodyPart,setBodyPart}) => {
             <Button onClick={handleSearch} className='search-btn' sx={{bgcolor:'#ff2625',color:'#fff',textTransform:'none',width:{lg:'175px',xs:'80px'},fontSize:{lg:'20px',xs:'14px'},height:'56px',position:'absolute',right:'0'}}>Search</Button>
         </Box>
         <Box sx={{position:'relative',width:'100%',p:'20px'}}>
-            <HorizontalsScrollBar data={bodyParts} bodyParts setBodyPart={setBodyPart} bodyPart={bodyPart} isBodyPart={true}/>
+            <HorizontalsScrollBar data={bodyParts} isBodyPart={true}/>
         </Box>
     </Stack>
   )

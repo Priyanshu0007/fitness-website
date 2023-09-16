@@ -7,8 +7,11 @@ import Home from './pages/Home'
 import ExerciseDetail from './pages/ExerciseDetail'
 import Footer from './components/Footer'
 import ScrollToTop from './components/ScrollToTop'
+import { Provider } from 'react-redux';
+import store from './store/store'
 const App = () => {
   return (
+    <Provider store={store}>
     <Box width="400px" sx={{width:{x1:'1488px'}}} m='auto'>
         <ScrollToTop />
         <Navbar/>
@@ -18,6 +21,7 @@ const App = () => {
         </Routes>
         <Footer/>
     </Box>
+    </Provider>
   )
 }
 
