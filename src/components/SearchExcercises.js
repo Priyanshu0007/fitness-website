@@ -1,31 +1,23 @@
 import { Box, Button, Stack, TextField, Typography } from '@mui/material'
-import React, { useEffect, useState } from 'react'
-import { exerciseOptions, fetchData } from '../utils/fetchData';
+import React, {useState } from 'react'
+import { exerciseOptions} from '../utils/fetchData';
 import HorizontalsScrollBar from './HorizontalsScrollBar';
-import { useDispatch } from 'react-redux';
-import {addExercises} from '../store/exercisesSlice'
+import { useDispatch, useSelector } from 'react-redux';
+import {addExercises, fetchExercises} from '../store/exercisesSlice'
 const SearchExcercises = () => {
     const dispatch=useDispatch();
+    const exercisesData=useSelector(state=>state.exercises.exercises);
     const [search,setSearch]=useState('');
-    const [bodyParts,setBodyParts]=useState([]);
-    useEffect(()=>{
-        const fetchExercisesData=async()=>{
-            const bodyPartsData=await fetchData('https://exercisedb.p.rapidapi.com/exercises/bodyPartList',exerciseOptions);
-            setBodyParts(['all',...bodyPartsData]);
-        }
-        fetchExercisesData();
-    },[])
-    const handleSearch= async()=>{
+    const bodyParts=['all','back', 'cardio', 'chest', 'lower arms', 'lower legs', 'neck', 'shoulders', 'upper arms', 'upper legs', 'waist'];
+    const handleSearch= ()=>{
         if (search) {
-            const exercisesData = await fetchData('https://exercisedb.p.rapidapi.com/exercises', exerciseOptions);
-      
+            dispatch(fetchExercises('https://exercisedb.p.rapidapi.com/exercises', exerciseOptions));
             const searchedExercises = exercisesData.filter(
               (item) => item.name.toLowerCase().includes(search)
                      || item.target.toLowerCase().includes(search)
                      || item.equipment.toLowerCase().includes(search)
                      || item.bodyPart.toLowerCase().includes(search),
             );
-      
             window.scrollTo({ top: 1800, left: 100, behavior: 'smooth' });
             setSearch('');
             dispatch(addExercises(searchedExercises));

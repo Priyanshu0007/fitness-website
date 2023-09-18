@@ -1,9 +1,10 @@
 import { Box, Pagination, Stack, Typography } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, {  useEffect, useState } from 'react'
 import ExerciseCard from './ExerciseCard'
-import { exerciseOptions, fetchData } from '../utils/fetchData';
-import { addExercises } from '../store/exercisesSlice';
+import { exerciseOptions } from '../utils/fetchData';
+import { fetchExercises } from '../store/exercisesSlice';
 import { useDispatch, useSelector } from 'react-redux';
+
 
 const Excercises = () => {
     const exercises=useSelector(state=>state.exercises.exercises);
@@ -18,15 +19,11 @@ const Excercises = () => {
         setCurrentPage(val);
         window.scrollTo({top:1800,behavior:'smooth'})
     }
+    
     useEffect(()=>{
-        const fetchExercisesData=async()=>{
-            let exercisesData=[];
-            if(bodyPart==='all'){exercisesData=await fetchData('https://exercisedb.p.rapidapi.com/exercises',exerciseOptions);}
-            else{exercisesData=await fetchData(`https://exercisedb.p.rapidapi.com/exercises/bodyPart/${bodyPart}`,exerciseOptions);}
-            dispatch(addExercises(exercisesData));
-            setCurrentPage(1);
-        }
-        fetchExercisesData();
+        if((bodyPart==='all')){dispatch(fetchExercises(`https://exercisedb.p.rapidapi.com/exercises`,exerciseOptions));}
+        else{dispatch(fetchExercises(`https://exercisedb.p.rapidapi.com/exercises/bodyPart/${bodyPart}`,exerciseOptions));}
+        setCurrentPage(1);
     },[bodyPart])
   return (
     <Box id='exercises' sx={{mt:{lg:'110px'}}} mt='50px' p='20px'>
